@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #countdown {
+            font-size: 6em;
+            font-weight: bold;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Custom Countdown Timer</h1>
+    <img src="https://tse3.mm.bing.net/th?id=OIG1.EURczfrsZ9j_9v7vfd55&pid=ImgGn" alt="Greenwich Mean Time Logo">
+<div>
+    <label for="timeInput">Set countdown (minutes): </label>
+    <input type="number" id="timeInput" min="1" max="1440">
+    <button onclick="startCountdown()">Start</button>
+</div>
+    <div id="countdown"></div>
+
+    <script>
+        let interval;
+
+        function startCountdown() {
+            clearInterval(interval);
+            const minutes = document.getElementById("timeInput").value;
+            if (minutes < 1 || minutes > 1440) {
+                alert("Please enter a valid time (1-1440 minutes)");
+                return;
+            }
+
+            let timeLeft = minutes * 60 * 1000;
+            function updateCountdown() {
+                if (timeLeft <= 0) {
+                    document.getElementById("countdown").innerHTML = "Time's up!";
+                    clearInterval(interval);
+                    return;
+                }
+                const minutesLeft = Math.floor(timeLeft / (1000 * 60));
+                const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerHTML = `${minutesLeft}m ${secondsLeft}s`;
+                timeLeft -= 1000;
+            }
+
+            interval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }
+    </script>
+</body>
+</html>

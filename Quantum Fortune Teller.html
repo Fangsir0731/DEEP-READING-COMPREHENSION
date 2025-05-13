@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Seer - Advanced Destiny Prediction System</title>
+    <style>
+        :root {
+            --star-blue: #0F172A;
+            --quantum-teal: #5EEAD4;
+            --nebula-purple: #7C3AED;
+            --error-red: #FF6B6B;
+            --success-green: #6BFF6B;
+            --gold: #FFD700;
+            --pulse-duration: 2s;
+            --transition-time: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--star-blue);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .quantum-pulse {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background: 
+                radial-gradient(circle, var(--quantum-teal) 1px, transparent 1px),
+                radial-gradient(circle, var(--nebula-purple) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: starfield 100s linear infinite;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        @keyframes starfield {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+
+        .container {
+            width: min(95%, 800px);
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(94, 234, 212, 0.3);
+            position: relative;
+            border: 1px solid rgba(94, 234, 212, 0.2);
+            margin: 2rem 0;
+            z-index: 1;
+        }
+
+        .input-section {
+            display: grid;
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        input, select {
+            padding: 1.2rem;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid var(--quantum-teal);
+            color: white;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all var(--transition-time) cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 25px var(--quantum-teal);
+            transform: scale(1.02);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            background: linear-gradient(135deg, #5EEAD4 0%, #7C3AED 100%);
+            color: var(--star-blue);
+            padding: 1.5rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 25%,
+                rgba(255,255,255,0.1) 50%,
+                transparent 75%);
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan {
+            0% { transform: rotate(0deg) translate(-50%, -50%); }
+            100% { transform: rotate(360deg) translate(-50%, -50%); }
+        }
+
+        .result-section {
+            display: none;
+            padding: 2rem;
+            margin-top: 2rem;
+            background: linear-gradient(160deg, 
+                rgba(94, 234, 212, 0.05) 0%,
+                rgba(15, 23, 42, 0.9) 70%);
+            border-radius: 18px;
+            border: 1px solid rgba(94, 234, 212, 0.3);
+            animation: hologram 3s infinite alternate;
+        }
+
+        @keyframes hologram {
+            0% { opacity: 0.98; filter: hue-rotate(-5deg); }
+            100% { opacity: 1; filter: hue-rotate(5deg); }
+        }
+
+        .neuro-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+        }
+
+        .neuro-node {
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--quantum-teal);
+            border-radius: 12px;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .neuro-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(94, 234, 212, 0.2);
+        }
+
+        .neuro-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .neuro-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #5EEAD4, #7C3AED);
+            width: var(--progress);
+            transition: width 1s ease;
+        }
+
+        .theory-card {
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background: rgba(15, 23, 42, 0.7);
+            border-left: 4px solid var(--quantum-teal);
+            border-radius: 8px;
+        }
+
+        h1, h2, h3, h4 {
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            text-align: center;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success-green);
+            text-align: center;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .quantum-loader {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            border: 4px solid rgba(94, 234, 212, 0.2);
+            border-top: 4px solid var(--quantum-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .payment-section {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 1px dashed var(--quantum-teal);
+        }
+
+        .interpretation-result {
+            background: rgba(94, 234, 212, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--quantum-teal);
+            display: none;
+        }
+
+        .health-prediction {
+            background: rgba(255,107,107,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--error-red);
+            display: none;
+        }
+
+        .fortune-prediction {
+            background: rgba(255,215,0,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--gold);
+            display: none;
+        }
+
+        .payment-button {
+            background: linear-gradient(135deg, #FF6B6B 0%, #7C3AED 100%);
+            margin-top: 1rem;
+        }
+
+        .premium-button {
+            background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .neuro-map {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            input, select, button {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quantum-pulse"></div>
+    
+    <div class="container">
+        <h1 style="text-align:center;font-size:2.5em;text-shadow:0 0 20px #5EEAD4;">🌌 Quantum Seer - Advanced Destiny Prediction System</h1>
+        
+        <div class="input-section">
+            <input type="text" id="userName" placeholder="🪐 Enter your name" autocomplete="off" required>
+            <select id="gender" required>
+                <option value="" disabled selected>⚡ Select your gender</option>
+                <option value="male">♂ Male</option>
+                <option value="female">♀ Female</option>
+                <option value="other">⚪ Other - Quantum Superposition</option>
+            </select>
+            <input type="number" id="age" placeholder="⏳ Enter your age" min="1" max="120" required>
+            <input type="date" id="birthDate" required>
+            <div class="error-message" id="errorMessage"></div>
+            <button id="scanButton">🚀 Initiate Quantum Resonance Scan</button>
+        </div>
+
+        <div id="resultDisplay" class="result-section">
+            <!-- Dynamic content will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables
+            let balance = 20; // Initial balance 20 yuan
+            let currentUser = null;
+            let hasPaidForInterpretation = false;
+            let hasPaidForPremium = false;
+            
+            // DOM elements
+            const scanButton = document.getElementById('scanButton');
+            const errorMessage = document.getElementById('errorMessage');
+            const resultDisplay = document.getElementById('resultDisplay');
+            
+            // Event listeners
+            scanButton.addEventListener('click', initiateQuantumScan);
+            
+            // Main scanning function
+            function initiateQuantumScan() {
+                // Get input values
+                const userName = document.getElementById('userName').value.trim();
+                const gender = document.getElementById('gender').value;
+                const age = parseInt(document.getElementById('age').value);
+                const birthDate = document.getElementById('birthDate').value;
+                
+                // Validate inputs
+                if (!validateInputs(userName, gender, age, birthDate)) return;
+                
+                // Create user object
+                currentUser = {
+                    name: userName,
+                    gender: gender,
+                    age: age,
+                    birthDate: new Date(birthDate),
+                    birthSeason: getBirthSeason(new Date(birthDate)),
+                    zodiac: getZodiacSign(new Date(birthDate)),
+                    cognition: analyzeCognition({name: userName, gender: gender, age: age}),
+                    lifePathNumber: calculateLifePathNumber(birthDate)
+                };
+                
+                // Show loading state
+                showLoadingState();
+                
+                // Simulate quantum computation delay
+                setTimeout(() => {
+                    showResults(currentUser);
+                    showPaymentSection();
+                }, 2000);
+            }
+            
+            // Input validation
+            function validateInputs(name, gender, age, birthDate) {
+                if (!name) {
+                    showError('Please enter your name');
+                    return false;
+                }
+                
+                if (!gender) {
+                    showError('Please select your gender');
+                    return false;
+                }
+                
+                if (isNaN(age) || age < 1 || age > 120) {
+                    showError('Please enter your age (1-120)');
+                    return false;
+                }
+                
+                if (!birthDate) {
+                    showError('Please select your birth date');
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            // Show error
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Show success message
+            function showSuccess(message) {
+                const successElement = document.createElement('div');
+                successElement.className = 'success-message';
+                successElement.textContent = message;
+                resultDisplay.appendChild(successElement);
+                
+                setTimeout(() => {
+                    successElement.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Show loading state
+            function showLoadingState() {
+                resultDisplay.innerHTML = `
+                    <div style="text-align:center;padding:3rem;">
+                        <div class="quantum-loader"></div>
+                        <p style="margin-top:1em;">🛰 Syncing cross-dimensional database...</p>
+                        <p>Quantum computation in progress, please wait...</p>
+                    </div>
+                `;
+                resultDisplay.style.display = 'block';
+            }
+            
+            // Analyze cognitive traits
+            function analyzeCognition(user) {
+                const nameHash = Array.from(user.name).reduce((hash, char) => {
+                    return (hash << 5) - hash + char.charCodeAt(0);
+                }, 0);
+                
+                const seed = (nameHash + user.age) % 1000;
+                const randomFactor = (min, max) => {
+                    const x = Math.sin(seed) * 10000;
+                    return min + (x - Math.floor(x)) * (max - min);
+                };
+                
+                return {
+                    logic: Math.min(100, Math.max(20, 50 + (nameHash % 30) + (user.age % 20) - (user.gender === 'female' ? 5 : 10))),
+                    creativity: Math.min(100, Math.max(20, 40 + (nameHash % 40) + randomFactor(-10, 15))),
+                    empathy: Math.min(100, Math.max(20, (user.gender === 'female' ? 60 : 45) + (user.age % 15) + randomFactor(-5, 10)))
+                };
+            }
+            
+            // Get birth season
+            function getBirthSeason(date) {
+                const month = date.getMonth() + 1;
+                if (month >= 3 && month <= 5) return 'Spring';
+                if (month >= 6 && month <= 8) return 'Summer';
+                if (month >= 9 && month <= 11) return 'Autumn';
+                return 'Winter';
+            }
+            
+            // Get zodiac sign
+            function getZodiacSign(date) {
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                
+                if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return {sign: 'Aquarius', element: 'Air'};
+                if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return {sign: 'Pisces', element: 'Water'};
+                if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return {sign: 'Aries', element: 'Fire'};
+                if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return {sign: 'Taurus', element: 'Earth'};
+                if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return {sign: 'Gemini', element: 'Air'};
+                if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return {sign: 'Cancer', element: 'Water'};
+                if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return {sign: 'Leo', element: 'Fire'};
+                if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return {sign: 'Virgo', element: 'Earth'};
+                if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return {sign: 'Libra', element: 'Air'};
+                if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return {sign: 'Scorpio', element: 'Water'};
+                if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return {sign: 'Sagittarius', element: 'Fire'};
+                return {sign: 'Capricorn', element: 'Earth'};
+            }
+            
+            // Calculate life path number
+            function calculateLifePathNumber(birthDate) {
+                const dateStr = birthDate.replace(/-/g, '');
+                let sum = 0;
+                
+                for (let i = 0; i < dateStr.length; i++) {
+                    sum += parseInt(dateStr[i]);
+                }
+                
+                while (sum > 9 && sum !== 11 && sum !== 22) {
+                    let temp = 0;
+                    while (sum > 0) {
+                        temp += sum % 10;
+                        sum = Math.floor(sum / 10);
+                    }
+                    sum = temp;
+                }
+                
+                return sum;
+            }
+            
+            // Show results
+            function showResults(user) {
+                const cosmicEnergy = calculateCosmicEnergy(user.age);
+                const zodiacInfo = getQuantumZodiac(user);
+                
+                resultDisplay.innerHTML = `
+                    <div class="theory-card">
+                        <h2>🌌 ${user.name}'s Quantum Personality Profile</h2>
+                        <p>Analysis based on ${user.age} Earth years of spacetime trajectory</p>
+                        <p>Life Path Number: ${user.lifePathNumber} (${getLifePathMeaning(user.lifePathNumber)})</p>
+                        <p>Birth Season: ${user.birthSeason} | Zodiac: ${user.zodiac.sign} (${user.zodiac.element})</p>
+                    </div>
+
+                    <div class="neuro-map">
+                        ${createNeuroNode('Logic Matrix', user.cognition.logic, '#5EEAD4')}
+                        ${createNeuroNode('Creativity Spectrum', user.cognition.creativity, '#7C3AED')}
+                        ${createNeuroNode('Empathy Frequency', user.cognition.empathy, '#FF6B6B')}
+                    </div>
+
+                    <div class="theory-card">
+                        <h3>🪐 Cosmic Energy Characteristics</h3>
+                        <p>Currently in <strong>${cosmicEnergy.name}</strong> phase: ${cosmicEnergy.power}</p>
+                        <p>${cosmicEnergy.description}</p>
+                        <p>Zodiac Resonance: ${zodiacInfo.sign} (${zodiacInfo.element} element dominant)</p>
+                        <p>${zodiacInfo.description}</p>
+                    </div>
+                `;
+                
+                animateBars();
+            }
+            
+            // Calculate cosmic energy
+            function calculateCosmicEnergy(age) {
+                const phases = [
+                    { 
+                        name: "New Moon Phase", 
+                        power: "New Potential", 
+                        description: "Your quantum field is initializing, ideal for new beginnings and setting intentions" 
+                    },
+                    { 
+                        name: "Waxing Moon", 
+                        power: "Growth Momentum", 
+                        description: "Your energy is accumulating, ideal for taking action and overcoming challenges" 
+                    },
+                    { 
+                        name: "Full Moon Phase", 
+                        power: "Peak Energy", 
+                        description: "Your quantum resonance reaches its peak, ideal for completing projects and important decisions" 
+                    },
+                    { 
+                        name: "Waning Moon", 
+                        power: "Wisdom Integration", 
+                        description: "Now is the time for reflection, integration, and releasing what no longer serves you" 
+                    }
+                ];
+                return phases[age % phases.length];
+            }
+            
+            // Get quantum zodiac information
+            function getQuantumZodiac(user) {
+                const zodiacDB = [
+                    { sign: "Quantum Aquarius", element: "Plasma", description: "Your thought patterns tend to break traditional frameworks" },
+                    { sign: "Photon Pisces", element: "Liquid Light", description: "You have high emotional sensitivity and intuition" },
+                    { sign: "Hyperdimensional Aries", element: "Pulse Energy", description: "Your decision-making style is quick and decisive" },
+                    { sign: "Gravitational Taurus", element: "Solid Wave", description: "You value security and material foundations" },
+                    { sign: "Quantum Gemini", element: "Information Flow", description: "You excel at processing multiple information streams simultaneously" },
+                    { sign: "Ionic Cancer", element: "Emotional Solution", description: "Your emotional memory capacity is exceptionally strong" },
+                    { sign: "Plasma Leo", element: "Nuclear Fusion", description: "Your creativity and leadership stand out" },
+                    { sign: "Nano Virgo", element: "Structural Crystal", description: "You excel at detailed analysis and system optimization" },
+                    { sign: "Holographic Libra", element: "Harmony Field", description: "You seek balance and harmonious relationships" },
+                    { sign: "Dark Matter Scorpio", element: "Transformation Energy", description: "You have powerful transformation and rebirth abilities" },
+                    { sign: "Curvature Sagittarius", element: "Expansion Wave", description: "You crave exploration and expanding your horizons" },
+                    { sign: "Quantum Capricorn", element: "Time Crystal", description: "You excel at building long-term structures and goals" }
+                ];
+                return zodiacDB[user.age % zodiacDB.length];
+            }
+            
+            // Get life path number meaning
+            function getLifePathMeaning(number) {
+                const meanings = {
+                    1: "Leader, Innovator",
+                    2: "Peacemaker, Coordinator",
+                    3: "Creative Expresser, Communicator",
+                    4: "Builder, Pragmatist",
+                    5: "Freedom Seeker, Transformer",
+                    6: "Nurturer, Responsible",
+                    7: "Truth Seeker, Analyst",
+                    8: "Achiever, Manager",
+                    9: "Humanitarian, Wise",
+                    11: "Intuitive Master, Illuminator",
+                    22: "Master Builder, Visionary"
+                };
+                return meanings[number] || "Unique life path";
+            }
+            
+            // Create neuro node
+            function createNeuroNode(title, value, color) {
+                return `
+                    <div class="neuro-node" style="border-color:${color}">
+                        <h4>${title}</h4>
+                        <div style="font-size:2em;color:${color}">${Math.round(value)}%</div>
+                        <div class="neuro-bar">
+                            <div class="neuro-progress" style="--progress:${value}%;background:${color}"></div>
+                        </div>
+                        <p style="font-size:0.9em;margin-top:0.5em;opacity:0.8;">
+                            ${getNodeDescription(title, value)}
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Get node description
+            function getNodeDescription(title, value) {
+                const descriptors = {
+                    'Logic Matrix': [
+                        "Intuitive thinking",
+                        "Balanced thinking",
+                        "Analytical thinking",
+                        "Hyper-rational thinking"
+                    ],
+                    'Creativity Spectrum': [
+                        "Traditional thinking",
+                        "Moderately innovative",
+                        "Highly creative",
+                        "Breakthrough thinking"
+                    ],
+                    'Empathy Frequency': [
+                        "Self-centered",
+                        "Situational empathy",
+                        "Highly empathetic",
+                        "Hyper-sensitive empathy"
+                    ]
+                };
+                
+                const level = Math.min(Math.floor(value / 25), descriptors[title].length - 1);
+                return descriptors[title][level];
+            }
+            
+            // Animate progress bars
+            function animateBars() {
+                const progressBars = document.querySelectorAll('.neuro-progress');
+                progressBars.forEach((bar, index) => {
+                    bar.style.width = '0';
+                    setTimeout(() => {
+                        bar.style.width = bar.style.getPropertyValue('--progress') + '%';
+                    }, 100 + index * 150);
+                });
+            }
+            
+            // Show payment section
+            function showPaymentSection() {
+                resultDisplay.innerHTML += `
+                    <div class="payment-section">
+                        <h3>🔍 Premium Interpretation Service</h3>
+                        <p>Your quantum analysis report has been generated, unlock full predictions:</p>
+                        <p>Current balance: ${balance}¥</p>
+                        
+                        <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                            <button class="payment-button" id="basicInterpretationButton">
+                                💰 Pay 5¥ for Basic Interpretation
+                            </button>
+                            
+                            <button class="premium-button" id="premiumButton">
+                                💎 Pay 15¥ for Premium Destiny Prediction (includes Health, Wealth, Love)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="interpretation-result" id="interpretationResult"></div>
+                    <div class="health-prediction" id="healthPrediction"></div>
+                    <div class="fortune-prediction" id="fortunePrediction"></div>
+                `;
+                
+                // Add button events
+                document.getElementById('basicInterpretationButton').addEventListener('click', () => {
+                    if (balance >= 5) {
+                        balance -= 5;
+                        hasPaidForInterpretation = true;
+                        provideBasicInterpretation();
+                        showSuccess('Payment successful! Basic interpretation unlocked');
+                        updateBalanceDisplay();
+                    } else {
+                        showError('Insufficient balance, please recharge');
+                    }
+                });
+                
+                document.getElementById('premiumButton').addEventListener('click', () => {
+                    if (balance >= 15) {
+                        balance -= 15;
+                        hasPaidForPremium = true;
+                        provideBasicInterpretation();
+                        providePremiumPredictions();
+                        showSuccess('Payment successful! Premium predictions unlocked');
+                        updateBalanceDisplay();
+                    } else {
+                        showError('Insufficient balance, please recharge');
+                    }
+                });
+            }
+            
+            // Update balance display
+            function updateBalanceDisplay() {
+                const balanceDisplay = document.querySelector('.payment-section p:nth-of-type(2)');
+                if (balanceDisplay) {
+                    balanceDisplay.textContent = `Current balance: ${balance}¥`;
+                }
+            }
+            
+            // Provide basic interpretation
+            function provideBasicInterpretation() {
+                const interpretationResult = document.getElementById('interpretationResult');
+                interpretationResult.style.display = 'block';
+                interpretationResult.innerHTML = `
+                    <h3>🧐 AI Professional Interpretation</h3>
+                    <p>According to your quantum personality analysis:</p>
+                    
+                    <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+                        ${createTraitCard('Logic Matrix', currentUser.cognition.logic, 
+                            'Represents your analysis, reasoning and problem-solving abilities', 
+                            ['Intuitive thinking', 'Balanced thinking', 'Analytical thinking', 'Hyper-rational thinking'])}
+                        
+                        ${createTraitCard('Creativity Spectrum', currentUser.cognition.creativity, 
+                            'Reflects your imagination, innovation and artistic expression', 
+                            ['Traditional thinking', 'Moderately innovative', 'Highly creative', 'Breakthrough thinking'])}
+                        
+                        ${createTraitCard('Empathy Frequency', currentUser.cognition.empathy, 
+                            'Measures your ability to understand others and form deep connections', 
+                            ['Self-centered', 'Situational empathy', 'Highly empathetic', 'Hyper-sensitive empathy'])}
+                    </div>
+                    
+                    <div class="theory-card" style="margin: 1.5rem 0;">
+                        <h4>🌟 Overall Personality Assessment</h4>
+                        <p>${getOverallInterpretation(currentUser)}</p>
+                        <p>${getPersonalityAdvice(currentUser)}</p>
+                    </div>
+                `;
+            }
+            
+            // Create trait card
+            function createTraitCard(title, value, description, levels) {
+                const level = Math.min(Math.floor(value / 25), levels.length - 1);
+                return `
+                    <div style="padding:1rem; background:rgba(255,255,255,0.05); border-radius:8px;">
+                        <h4>${title}: ${Math.round(value)}%</h4>
+                        <p><strong>${levels[level]}</strong> - ${description}</p>
+                        <div class="neuro-bar">
+                            <div class="neuro-progress" style="--progress:${value}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Get overall interpretation
+            function getOverallInterpretation(user) {
+                const avgScore = (user.cognition.logic + user.cognition.creativity + user.cognition.empathy) / 3;
+                
+                if (avgScore < 40) {
+                    return `Your comprehensive quantum personality score is low (${Math.round(avgScore)}%), indicating you may face more challenges in life.`;
+                } else if (avgScore < 70) {
+                    return `Your comprehensive quantum personality score is moderate (${Math.round(avgScore)}%), the most common type. You can handle most life situations.`;
+                } else {
+                    return `Your comprehensive quantum personality score is high (${Math.round(avgScore)}%)! You have an exceptional combination of cognitive abilities.`;
+                }
+            }
+            
+            // Get personality advice
+            function getPersonalityAdvice(user) {
+                const advices = [];
+                
+                if (user.cognition.logic < 40) {
+                    advices.push("Try logic games and puzzles to train your analytical skills");
+                } else if (user.cognition.logic > 80) {
+                    advices.push("Your strong logic makes you suitable for technology, engineering or scientific research");
+                }
+                
+                if (user.cognition.creativity < 40) {
+                    advices.push("Try artistic creation to stimulate your creativity");
+                } else if (user.cognition.creativity > 80) {
+                    advices.push("Your exceptional creativity suits artistic or innovative fields");
+                }
+                
+                if (user.cognition.empathy < 40) {
+                    advices.push("Practice perspective-taking to improve empathy");
+                } else if (user.cognition.empathy > 80) {
+                    advices.push("Your high empathy makes you an excellent relationship coordinator");
+                }
+                
+                return advices.length > 0 ? "Advice: " + advices.join(". ") + "." : "";
+            }
+            
+            // Provide premium predictions
+            function providePremiumPredictions() {
+                // Health prediction
+                const healthPrediction = document.getElementById('healthPrediction');
+                healthPrediction.style.display = 'block';
+                healthPrediction.innerHTML = generateHealthPrediction(currentUser);
+                
+                // Fortune prediction
+                const fortunePrediction = document.getElementById('fortunePrediction');
+                fortunePrediction.style.display = 'block';
+                fortunePrediction.innerHTML = generateFortunePrediction(currentUser);
+            }
+            
+            // Generate health prediction
+            function generateHealthPrediction(user) {
+                // Health score algorithm
+                const baseHealth = 75;
+                const ageFactor = (120 - user.age) / 120 * 30;
+                const logicFactor = user.cognition.logic * 0.2;
+                const empathyFactor = user.cognition.empathy * 0.15;
+                const creativityFactor = user.cognition.creativity * 0.1;
+                
+                const healthScore = Math.min(100, Math.max(30, 
+                    baseHealth + ageFactor + logicFactor + empathyFactor + creativityFactor));
+                
+                // Life expectancy prediction
+                const baseLifeExpectancy = 78;
+                const lifeExpectancy = Math.min(100, Math.max(60,
+                    baseLifeExpectancy + 
+                    (user.cognition.logic / 10) + 
+                    (user.cognition.empathy / 5) - 
+                    (user.age / 30)));
+                
+                // Risk factors
+                const riskFactors = [];
+                if (user.age > 50) riskFactors.push('Age-related risks');
+                if (user.cognition.empathy < 40) riskFactors.push('Social isolation risk');
+                if (user.cognition.logic > 80) riskFactors.push('Overthinking stress');
+                
+                // Potential health issues
+                const potentialIssues = [];
+                const birthMonth = user.birthDate.getMonth() + 1;
+                
+                if ([12,1,2].includes(birthMonth)) potentialIssues.push('Winter birth: Pay attention to cardiovascular health');
+                if ([3,4,5].includes(birthMonth)) potentialIssues.push('Spring birth: Focus on respiratory system');
+                if ([6,7,8].includes(birthMonth)) potentialIssues.push('Summer birth: Pay attention to skin health');
+                if ([9,10,11].includes(birthMonth)) potentialIssues.push('Autumn birth: Focus on digestive system');
+                
+                if (user.cognition.empathy < 30) potentialIssues.push('Low empathy: Mental health risk');
+                if (user.cognition.creativity > 70) potentialIssues.push('High creativity: Watch for mood swings');
+                
+                return `
+                    <h3>❤️ Health & Longevity Prediction</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                        <div class="neuro-node" style="border-color: #FF6B6B;">
+                            <h4>Health Score</h4>
+                            <div style="font-size:2em;color:#FF6B6B;">${Math.round(healthScore)}%</div>
+                            <p>${getHealthStatus(healthScore)}</p>
+                        </div>
+                        
+                        <div class="neuro-node" style="border-color: #FFD700;">
+                            <h4>Predicted Lifespan</h4>
+                            <div style="font-size:2em;color:#FFD700;">${Math.round(lifeExpectancy)} years</div>
+                            <p>±${Math.floor(Math.random()*5)+3} years</p>
+                        </div>
+                    </div>
+                    
+                    <div class="theory-card" style="margin: 1.5rem 0;">
+                        <h4>⚠️ Major Health Risks</h4>
+                        <ul>
+                            ${riskFactors.map(factor => `<li>${factor}</li>`).join('')}
+                            ${potentialIssues.map(issue => `<li>${issue}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="theory-card">
+                        <h4>🏥 Health Advice</h4>
+                        <p>${getHealthAdvice(user)}</p>
+                    </div>
+                `;
+            }
+            
+            // Get health status
+            function getHealthStatus(score) {
+                if (score >= 80) return "Excellent - You have extraordinary health potential";
+                if (score >= 65) return "Good - Maintain your healthy lifestyle";
+                if (score >= 50) return "Average - Need attention in some health areas";
+                return "Needs attention - Recommend comprehensive health check";
+            }
+            
+            // Get health advice
+            function getHealthAdvice(user) {
+                const advices = [];
+                
+                if (user.age > 40) {
+                    advices.push("Get comprehensive annual health checkups");
+                }
+                
+                if (user.cognition.empathy < 40) {
+                    advices.push("Engage in social activities to improve mental health");
+                }
+                
+                if (user.cognition.logic > 70) {
+                    advices.push("Regular meditation to relieve overthinking stress");
+                }
+                
+                if ([12,1,2].includes(user.birthDate.getMonth() + 1)) {
+                    advices.push("Stay warm in winter, regular cardiovascular checks");
+                }
+                
+                if (user.cognition.creativity > 70) {
+                    advices.push("Channel emotional energy through artistic creation");
+                }
+                
+                return advices.length > 0 ? advices.join(". ") + "." : "Maintain current health habits, monitor body indicators regularly.";
+            }
+            
+            // Generate fortune prediction
+            function generateFortunePrediction(user) {
+                // Wealth prediction
+                const wealthPotential = Math.min(100, Math.max(20,
+                    50 + (user.cognition.logic * 0.3) + (user.cognition.creativity * 0.4)));
+                
+                // Love prediction
+                const lovePotential = Math.min(100, Math.max(30,
+                    60 + (user.cognition.empathy * 0.5) - (user.age / 4)));
+                
+                // Career prediction
+                const careerPotential = Math.min(100, Math.max(40,
+                    60 + (user.cognition.logic * 0.4) + (user.cognition.creativity * 0.3)));
+                
+                // Key years
+                const currentYear = new Date().getFullYear();
+                const luckyYears = [
+                    currentYear + (user.lifePathNumber % 3) + 1,
+                    currentYear + (user.age % 7) + 3,
+                    currentYear + (user.name.length % 5) + 5
+                ].sort((a,b) => a - b);
+                
+                return `
+                    <h3>🔮 Destiny Prediction</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                        <div class="neuro-node" style="border-color: #FFD700;">
+                            <h4>Wealth Potential</h4>
+                            <div style="font-size:2em;color:#FFD700;">${Math.round(wealthPotential)}%</div>
+                            <p>${getWealthPotentialText(wealthPotential)}</p>
+                        </div>
+                        
+                        <div class="neuro-node" style="border-color: #FF6B6B;">
+                            <h4>Love Fortune</h4>
+                            <div style="font-size:2em;color:#FF6B6B;">${Math.round(lovePotential)}%</div>
+                            <p>${getLovePotentialText(lovePotential)}</p>
+                        </div>
+                        
+                        <div class="neuro-node" style="border-color: #5EEAD4;">
+                            <h4>Career Development</h4>
+                            <div style="font-size:2em;color:#5EEAD4;">${Math.round(careerPotential)}%</div>
+                            <p>${getCareerPotentialText(careerPotential)}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="theory-card" style="margin: 1.5rem 0;">
+                        <h4>📅 Key Year Predictions</h4>
+                        <p>Your life turning points may occur in these years:</p>
+                        <ul>
+                            <li>${luckyYears[0]}: ${getYearPrediction(user, luckyYears[0])}</li>
+                            <li>${luckyYears[1]}: ${getYearPrediction(user, luckyYears[1])}</li>
+                            <li>${luckyYears[2]}: ${getYearPrediction(user, luckyYears[2])}</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="theory-card">
+                        <h4>✨ Destiny Advice</h4>
+                        <p>${getFortuneAdvice(user)}</p>
+                    </div>
+                `;
+            }
+            
+            // Get wealth potential description
+            function getWealthPotentialText(score) {
+                if (score >= 80) return "Exceptional - You have millionaire potential";
+                if (score >= 65) return "High - Financial freedom achievable";
+                if (score >= 50) return "Average - Stable financial situation";
+                return "Needs planning - Recommend learning financial knowledge";
+            }
+            
+            // Get love potential description
+            function getLovePotentialText(score) {
+                if (score >= 80) return "Exceptional - Deep emotional relationships";
+                if (score >= 65) return "Good - Stable emotional life";
+                if (score >= 50) return "Average - Needs more emotional investment";
+                return "Needs attention - Recommend improving communication skills";
+            }
+            
+            // Get career potential description
+            function getCareerPotentialText(score) {
+                if (score >= 80) return "Outstanding - Leadership potential";
+                if (score >= 65) return "Excellent - Professional achievements";
+                if (score >= 50) return "Stable - Reliable career development";
+                return "Needs planning - Recommend career training";
+            }
+            
+            // Get year prediction
+            function getYearPrediction(user, year) {
+                const ageInYear = user.age + (year - new Date().getFullYear());
+                const predictions = [
+                    `Career breakthrough - ${getCareerSuggestion(user, ageInYear)}`,
+                    `Relationship transformation - ${getRelationshipSuggestion(user, ageInYear)}`,
+                    `Financial opportunity - ${getFinancialSuggestion(user, ageInYear)}`,
+                    `Health turning point - ${getHealthSuggestion(user, ageInYear)}`,
+                    `Personal growth - ${getGrowthSuggestion(user, ageInYear)}`
+                ];
+                return predictions[(year + user.name.length) % predictions.length];
+            }
+            
+            // Get career suggestion
+            function getCareerSuggestion(user, age) {
+                if (user.cognition.logic > 70 && user.cognition.creativity > 60) {
+                    return "Major opportunities in technological innovation";
+                } else if (user.cognition.empathy > 70) {
+                    return "Relationship-oriented careers will flourish";
+                } else if (age > 50) {
+                    return "Consider knowledge transfer and mentoring";
+                } else {
+                    return "Important promotion opportunities in current career path";
+                }
+            }
+            
+            // Get relationship suggestion
+            function getRelationshipSuggestion(user, age) {
+                if (age < 30) {
+                    return "May meet important life partner";
+                } else if (age < 50) {
+                    return "Existing relationships will deepen or transform positively";
+                } else {
+                    return "Family relationships become more harmonious";
+                }
+            }
+            
+            // Get financial suggestion
+            function getFinancialSuggestion(user, age) {
+                if (age < 35) {
+                    return "Best time to invest in your skills";
+                } else if (age < 55) {
+                    return "Long-term investments will yield significant returns";
+                } else {
+                    return "Financial stability, suitable for retirement planning";
+                }
+            }
+            
+            // Get health suggestion
+            function getHealthSuggestion(user, age) {
+                if (age > 40) {
+                    return "Preventive health checks especially important";
+                } else {
+                    return "Golden period to establish healthy habits";
+                }
+            }
+            
+            // Get growth suggestion
+            function getGrowthSuggestion(user, age) {
+                if (age < 30) {
+                    return "Key stage for self and world exploration";
+                } else if (age < 50) {
+                    return "Integrate experience for self-breakthrough";
+                } else {
+                    return "Period for wisdom sharing and spiritual growth";
+                }
+            }
+            
+            // Get fortune advice
+            function getFortuneAdvice(user) {
+                const advices = [];
+                
+                if (user.cognition.logic > 70 && user.cognition.creativity > 60) {
+                    advices.push("Your strong logic and creativity combination suits technological innovation fields");
+                }
+                
+                if (user.cognition.empathy > 70) {
+                    advices.push("Your high empathy makes you excel in relationship-intensive careers");
+                }
+                
+                if (user.age < 30) {
+                    advices.push("Now is the best time to invest in yourself and explore possibilities");
+                } else if (user.age < 50) {
+                    advices.push("Focus on deepening expertise and building long-term relationships");
+                } else {
+                    advices.push("Consider sharing your wisdom and experience with younger generations");
+                }
+                
+                if (user.zodiac.element === 'Fire') {
+                    advices.push("As a fire sign, you need regular challenges to avoid boredom");
+                } else if (user.zodiac.element === 'Water') {
+                    advices.push("As a water sign, emotional expression is crucial to your happiness");
+                }
+                
+                return advices.join(". ") + ".";
+            }
+        });
+    </script>
+</body>
+</html>
