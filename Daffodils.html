@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordsworth's Daffodils: Interactive Poem Analysis</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background: url('https://wy-static.wenxiaobai.com/chat-text-to-image/5aa9ac90-67da-42ce-9818-a8a6fd810995.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: -1;
+        }
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2a5a2a;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        .poet-portrait {
+            float: right;
+            margin: 0 0 20px 20px;
+            width: 180px;
+            border-radius: 8px;
+            border: 3px solid #2a5a2a;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        .poem-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .poem {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            line-height: 2;
+            flex: 1;
+            min-width: 300px;
+        }
+        .interpretation {
+            background-color: rgba(240, 247, 240, 0.9);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 300px;
+            border-left: 4px solid #2a5a2a;
+        }
+        .line {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .interpretation-line {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .word {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: #1a6e1a;
+            font-weight: bold;
+            text-decoration: underline dotted;
+            transition: all 0.2s;
+        }
+        .word:hover {
+            color: #0d4d0d;
+            text-shadow: 0 0 3px rgba(255,255,255,0.8);
+        }
+        .word:hover::after {
+            content: attr(data-info);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #1a6e1a;
+            border-radius: 6px;
+            width: 220px;
+            z-index: 100;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .analysis {
+            background-color: rgba(240, 247, 240, 0.9);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid #2a5a2a;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .audio-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 18px;
+            background-color: #2a5a2a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        button:hover {
+            background-color: #1a6e1a;
+            transform: translateY(-2px);
+        }
+        .exercise-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .exercise {
+            background-color: rgba(230, 243, 230, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 300px;
+            border-top: 3px solid #1a6e1a;
+        }
+        .gap-fill {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 6px;
+        }
+        .gap {
+            border-bottom: 2px solid #1a6e1a;
+            padding: 0 8px;
+            min-width: 120px;
+            display: inline-block;
+            font-weight: bold;
+            color: #1a6e1a;
+        }
+        .quiz {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 6px;
+        }
+        .question {
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: #2a5a2a;
+        }
+        .options {
+            margin-left: 25px;
+        }
+        .hidden {
+            display: none;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-style: italic;
+            color: #2a5a2a;
+            background-color: rgba(255,255,255,0.8);
+        }
+        .matching-exercise {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .match-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .match-item select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #2a5a2a;
+        }
+        @media (max-width: 768px) {
+            .poet-portrait {
+                float: none;
+                display: block;
+                margin: 0 auto 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <img src="https://imgs0.zupu.cn/zupuls/p30/624e26bb-d262-45fb-9ec8-d183d648a26b.jpg" 
+             alt="Portrait of William Wordsworth" 
+             class="poet-portrait"
+             title="William Wordsworth (1770-1850)">
+        
+        <h1>William Wordsworth's "I Wandered Lonely as a Cloud"</h1>
+        
+        <!-- Audio Controls -->
+        <div class="audio-controls">
+            <button id="musicToggle">🎵 Play Background Music</button>
+            <audio id="bgMusic" loop>
+                <source src="https://img.tukuppt.com/newpreview_music/09/01/82/5c8a148f5cc1a49169.mp3" type="audio/mpeg">
+                Your browser does not support audio.
+            </audio>
+            <button id="ttsButton">🗣️ Read Poem Aloud</button>
+            <button id="stopTtsButton" style="display:none;">⏹️ Stop Reading</button>
+            <select id="voiceSelect" style="padding: 8px; border-radius: 4px; border: 1px solid #2a5a2a;">
+                <option value="">Select Voice</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <h2>About the Poet</h2>
+            <p><strong>William Wordsworth (1770–1850)</strong> was a major English Romantic poet who, along with Samuel Taylor Coleridge, helped launch the Romantic Age in English literature with their 1798 joint publication, <em>Lyrical Ballads</em>. Wordsworth believed poetry should express emotion in "the real language of men" and drew inspiration from nature and memory.</p>
+        </div>
+
+<div class="section">
+    <h2>Background of the Poem</h2>
+    <p>Written in 1804 and published in 1807, the poem was inspired by a real encounter Wordsworth had on April 15, 1802, while walking with his sister Dorothy near Glencoyne Bay on the shores of Ullswater in the Lake District. Dorothy's journal provides a vivid firsthand account that directly influenced the poem:</p>
+    
+    <div class="journal-entry" style="background-color: rgba(240,240,230,0.8); padding:15px; border-left:3px solid #5a5a2a; margin:15px 0; font-style:italic;">
+        <p>"When we were in the woods beyond Gowbarrow Park, we saw a few daffodils close to the water-side. We fancied that the lake had floated the seeds ashore, and that the little colony had so sprung up. But as we went along there were more and yet more; and at last, under the boughs of the trees, we saw that there was a long belt of them along the shore, about the breadth of a country turnpike road."</p>
+        <p>"I never saw daffodils so beautiful. They grew among the mossy stones about and about them; some rested their heads upon these stones as on a pillow for weariness; and the rest tossed and reeled and danced, and seemed as if they verily laughed with the wind, that blew upon them over the lake."</p>
+        <p style="text-align:right; font-weight:bold;">— Dorothy Wordsworth, The Grasmere Journal, April 15, 1802</p>
+    </div>
+
+    <h3>Key Connections Between Journal and Poem</h3>
+    <ul>
+        <li><strong>The Dancing Flowers:</strong> Dorothy's description of daffodils that "tossed and reeled and danced" directly inspired Wordsworth's personification ("Tossing their heads in sprightly dance")</li>
+        <li><strong>Lakeside Setting:</strong> Both accounts emphasize the flowers growing "along the shore" of the lake</li>
+        <li><strong>Abundance:</strong> Dorothy's amazement at the growing numbers ("more and yet more") becomes Wordsworth's hyperbolic "ten thousand saw I at a glance"</li>
+        <li><strong>Emotional Impact:</strong> Dorothy's aesthetic appreciation ("I never saw daffodils so beautiful") transforms into the poem's lasting emotional resonance</li>
+    </ul>
+
+    <h3>Creative Transformation</h3>
+    <p>While Dorothy recorded the literal scene with journalistic detail, William transformed it through poetic imagination. Where Dorothy saw flowers that "seemed as if they verily laughed," William created the iconic image of the "jocund company" of flowers that outdid the waves in glee. The journal entry shows the raw observation, while the poem demonstrates how Wordsworth "recollected in tranquility" to create lasting art.</p>
+</div>
+        <!-- Poem with Interpretation -->
+        <div class="poem-container">
+            <div class="poem" id="poemText">
+                <h2>I Wandered Lonely as a Cloud</h2>
+                <div class="line">I wandered lonely as a cloud</div>
+                <div class="line">That floats on high o'er vales and hills,</div>
+                <div class="line">When all at once I saw a crowd,</div>
+                <div class="line">A host, of golden <span class="word" data-info="Pronunciation: /ˈdæfədɪlz/ POS: noun 水仙花">daffodils</span>;</div>
+                <div class="line">Beside the lake, beneath the trees,</div>
+                <div class="line"><span class="word" data-info="Pronunciation: /ˈflʌtərɪŋ/ POS: verb 飘动">Fluttering</span> and dancing in the breeze.</div>
+                
+                <div class="line">Continuous as the stars that shine</div>
+                <div class="line">And twinkle on the Milky Way,</div>
+                <div class="line">They stretched in never-ending line</div>
+                <div class="line">Along the <span class="word" data-info="Pronunciation: /ˈmɑːdʒɪn/ POS: noun 海岸边缘">margin</span> of a bay:</div>
+                <div class="line">Ten thousand saw I at a glance,</div>
+                <div class="line"><span class="word" data-info="Pronunciation: /ˈtɒsɪŋ/ POS: verb 摇摆">Tossing</span> their heads in <span class="word" data-info="Pronunciation: /ˈspraɪtli/ POS: adjective 活泼的">sprightly</span> dance.</div>
+                
+                <div class="line">The waves beside them danced; but they</div>
+                <div class="line">Out-did the sparkling waves in <span class="word" data-info="Pronunciation: /gl'iː/ POS: noun 欢乐">glee</span>:</div>
+                <div class="line">A poet could not but be gay,</div>
+                <div class="line">In such a <span class="word" data-info="Pronunciation: /'dʒɑkənd/ POS: adjective 欢乐的">jocund</span> company:</div>
+                <div class="line">I gazed—and gazed—but little thought</div>
+                <div class="line">What wealth the show to me had brought:</div>
+                
+                <div class="line">For oft, when on my couch I lie</div>
+                <div class="line">In <span class="word" data-info="Pronunciation: /'veɪkənt/ POS: adjective 空的">vacant</span> or in <span class="word" data-info="Pronunciation: /'pensɪv/ POS: adjective 沉思的">pensive</span>  mood,</div>
+                <div class="line">They flash upon that <span class="word" data-info="Pronunciation: /ˈɪnwərd/ POS: adjective 内心的">inward</span> eye</div>
+                <div class="line">Which is the <span class="word" data-info="Pronunciation: /ˈblɪs/ POS: noun 极乐">bliss</span> of solitude;</div>
+                <div class="line">And then my heart with pleasure fills,</div>
+                <div class="line">And dances with the daffodils.</div>
+            </div>
+
+            <div class="interpretation">
+                <h2>Line-by-Line Interpretation</h2>
+                <div class="interpretation-line"><strong>Line 1:</strong> The speaker compares himself to a solitary cloud</div>
+                <div class="interpretation-line"><strong>Line 2:</strong> Floating above valleys and hills, suggesting a sense of detachment</div>
+                <div class="interpretation-line"><strong>Line 3-4:</strong> Sudden encounter with a large group of golden daffodils</div>
+                <div class="interpretation-line"><strong>Line 5-6:</strong> The flowers are by a lake under trees, moving in the wind</div>
+                <div class="interpretation-line"><strong>Line 7-8:</strong> Comparison to countless stars in the Milky Way</div>
+                <div class="interpretation-line"><strong>Line 9-10:</strong> The flowers stretch endlessly along the shore</div>
+                <div class="interpretation-line"><strong>Line 11-12:</strong> The daffodils appear to dance joyfully</div>
+                <div class="interpretation-line"><strong>Line 13-14:</strong> The flowers outshine even the sparkling waves</div>
+                <div class="interpretation-line"><strong>Line 15-16:</strong> The poet feels happy in this cheerful company</div>
+                <div class="interpretation-line"><strong>Line 17-18:</strong> At the time, he didn't realize the value of this experience</div>
+                <div class="interpretation-line"><strong>Line 19-20:</strong> Later, when resting or in thoughtful mood</div>
+                <div class="interpretation-line"><strong>Line 21-22:</strong> The memory returns as a vision of happiness</div>
+                <div class="interpretation-line"><strong>Line 23-24:</strong> The memory fills his heart with joy</div>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="analysis">
+            <h2>Analysis</h2>
+            
+            <div class="section">
+                <h3>Main Idea by Verse</h3>
+                <p><strong>Stanza 1:</strong> The speaker wanders alone, comparing himself to a cloud, when he suddenly sees a crowd of golden daffodils by a lake.</p>
+                <p><strong>Stanza 2:</strong> The daffodils are compared to stars in the Milky Way, emphasizing their vast number and joyful movement.</p>
+                <p><strong>Stanza 3:</strong> The daffodils outshine the waves, filling the poet with happiness.</p>
+                <p><strong>Stanza 4:</strong> Later, in solitude, the memory of the daffodils brings the speaker joy.</p>
+            </div>
+            
+            <div class="section">
+                <h3>Themes</h3>
+                <ul>
+                    <li><strong>Nature's Beauty:</strong> The daffodils symbolize nature's power to inspire and heal.</li>
+                    <li><strong>Memory & Imagination:</strong> The "inward eye" recalls the scene, proving memory's role in sustaining happiness.</li>
+                    <li><strong>Solitude vs. Connection:</strong> Loneliness is alleviated by nature's companionship.</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>Structure & Literary Devices</h3>
+                <ul>
+                    <li><strong>Form:</strong> Four sestets (6-line stanzas) with an <em>ABABCC</em> rhyme scheme and iambic tetrameter.</li>
+                    <li><strong>Simile:</strong> "Lonely as a cloud" establishes the speaker's isolation.</li>
+                    <li><strong>Personification:</strong> Daffodils "dance" and "toss their heads," giving them human qualities.</li>
+                    <li><strong>Hyperbole:</strong> "Ten thousand saw I at a glance" exaggerates the flowers' abundance.</li>
+                    <li><strong>Symbolism:</strong> Daffodils represent nature's eternal joy and the power of memory.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Interactive Exercises -->
+        <div class="exercise-section">
+            <div class="exercise">
+                <h2>Gap Fill Activity</h2>
+                <div class="gap-fill">
+                    <p>Complete the missing words from the poem:</p>
+                    <p>
+                        I wandered lonely as a <span class="gap" id="gap1"></span><br>
+                        That floats on high o'er vales and hills,<br>
+                        When all at once I saw a <span class="gap" id="gap2"></span>,<br>
+                        A host, of golden <span class="gap" id="gap3"></span>;<br>
+                        Beside the lake, beneath the trees,<br>
+                        <span class="gap" id="gap4"></span> and dancing in the breeze.
+                    </p>
+                    <button onclick="checkGaps()">Check Answers</button>
+                    <div id="gapFeedback" class="feedback hidden"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h2>Multiple-Choice Quiz</h2>
+                <div class="quiz">
+                    <div class="question">1. What literary device is used in "lonely as a cloud"?</div>
+                    <div class="options">
+                        <input type="radio" name="q1" id="q1a"> <label for="q1a">Metaphor</label><br>
+                        <input type="radio" name="q1" id="q1b"> <label for="q1b">Simile</label><br>
+                        <input type="radio" name="q1" id="q1c"> <label for="q1c">Personification</label>
+                    </div>
+                    <div class="question">2. What does the "inward eye" refer to?</div>
+                    <div class="options">
+                        <input type="radio" name="q2" id="q2a"> <label for="q2a">Physical vision</label><br>
+                        <input type="radio" name="q2" id="q2b"> <label for="q2b">Memory and imagination</label><br>
+                        <input type="radio" name="q2" id="q2c"> <label for="q2c">A telescope</label>
+                    </div>
+                    <button onclick="checkQuiz()">Submit Quiz</button>
+                    <div id="quizFeedback" class="feedback hidden"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h2>Literary Devices Matching</h2>
+                <div class="matching-exercise">
+                    <div class="match-item">
+                        <span>"lonely as a cloud"</span>
+                        <select id="match1">
+                            <option value="">Select device</option>
+                            <option value="simile">Simile</option>
+                            <option value="metaphor">Metaphor</option>
+                            <option value="personification">Personification</option>
+                        </select>
+                    </div>
+                    <div class="match-item">
+                        <span>"dancing in the breeze"</span>
+                        <select id="match2">
+                            <option value="">Select device</option>
+                            <option value="simile">Simile</option>
+                            <option value="metaphor">Metaphor</option>
+                            <option value="personification">Personification</option>
+                        </select>
+                    </div>
+                    <div class="match-item">
+                        <span>"Ten thousand saw I at a glance"</span>
+                        <select id="match3">
+                            <option value="">Select device</option>
+                            <option value="hyperbole">Hyperbole</option>
+                            <option value="alliteration">Alliteration</option>
+                            <option value="symbolism">Symbolism</option>
+                        </select>
+                    </div>
+                    <div class="match-item">
+                        <span>"the bliss of solitude"</span>
+                        <select id="match4">
+                            <option value="">Select device</option>
+                            <option value="oxymoron">Oxymoron</option>
+                            <option value="alliteration">Alliteration</option>
+                            <option value="symbolism">Symbolism</option>
+                        </select>
+                    </div>
+                    <button onclick="checkMatching()">Check Answers</button>
+                    <div id="matchFeedback" class="feedback hidden"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h2>Theme Exploration</h2>
+                <div class="quiz">
+                    <div class="question">Which lines best illustrate the theme of nature's beauty?</div>
+                    <div class="options">
+                        <input type="checkbox" id="theme1"> <label for="theme1">"I wandered lonely as a cloud"</label><br>
+                        <input type="checkbox" id="theme2"> <label for="theme2">"A host, of golden daffodils"</label><br>
+                        <input type="checkbox" id="theme3"> <label for="theme3">"Tossing their heads in sprightly dance"</label><br>
+                        <input type="checkbox" id="theme4"> <label for="theme4">"What wealth the show to me had brought"</label>
+                    </div>
+                    <button onclick="checkTheme()">Submit</button>
+                    <div id="themeFeedback" class="feedback hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background Music Toggle
+        const musicToggle = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bgMusic');
+        musicToggle.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicToggle.innerHTML = '&#10074;&#10074; Pause Music';
+            } else {
+                bgMusic.pause();
+                musicToggle.innerHTML = '&#9658; Play Music';
+            }
+        });
+
+        // Text-to-Speech Functionality
+        const ttsButton = document.getElementById('ttsButton');
+        const stopTtsButton = document.getElementById('stopTtsButton');
+        const voiceSelect = document.getElementById('voiceSelect');
+        let speech = null;
+
+        // Get available voices
+        function loadVoices() {
+            const voices = window.speechSynthesis.getVoices();
+            voiceSelect.innerHTML = '<option value="">Select Voice</option>';
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        // Load voices when they become available
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        // Read poem aloud
+        ttsButton.addEventListener('click', () => {
+            if (speech && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            
+            const poemText = document.getElementById('poemText').textContent;
+            const selectedVoice = voiceSelect.value;
+            const voices = window.speechSynthesis.getVoices();
+            const voice = voices.find(v => v.name === selectedVoice) || voices.find(v => v.lang.includes('en'));
+            
+            speech = new SpeechSynthesisUtterance();
+            speech.text = poemText;
+            speech.rate = 0.9;
+            speech.pitch = 1;
+            speech.volume = 1;
+            
+            if (voice) {
+                speech.voice = voice;
+            }
+            
+            window.speechSynthesis.speak(speech);
+            ttsButton.style.display = 'none';
+            stopTtsButton.style.display = 'inline-block';
+        });
+
+        // Stop reading
+        stopTtsButton.addEventListener('click', () => {
+            window.speechSynthesis.cancel();
+            ttsButton.style.display = 'inline-block';
+            stopTtsButton.style.display = 'none';
+        });
+
+        // When speech ends
+        speechSynthesis.onend = function() {
+            ttsButton.style.display = 'inline-block';
+            stopTtsButton.style.display = 'none';
+        };
+
+        // Gap Fill Activity
+        function checkGaps() {
+            const answers = {
+                gap1: 'cloud',
+                gap2: 'crowd',
+                gap3: 'daffodils',
+                gap4: 'Fluttering'
+            };
+            let correct = 0;
+            for (const [id, answer] of Object.entries(answers)) {
+                const userInput = prompt(`Fill in the blank for: ${id}`)?.trim();
+                if (userInput?.toLowerCase() === answer.toLowerCase()) {
+                    document.getElementById(id).textContent = userInput;
+                    correct++;
+                } else {
+                    document.getElementById(id).textContent = answer;
+                }
+            }
+            const feedback = document.getElementById('gapFeedback');
+            feedback.innerHTML = `You got ${correct} out of 4 correct!`;
+            if (correct === 4) {
+                feedback.innerHTML += '<br>Excellent work!';
+                feedback.style.color = '#1a6e1a';
+            } else if (correct >= 2) {
+                feedback.innerHTML += '<br>Good try!';
+                feedback.style.color = '#5a8a5a';
+            } else {
+                feedback.innerHTML += '<br>Review the poem and try again!';
+                feedback.style.color = '#8a2a2a';
+            }
+            feedback.classList.remove('hidden');
+        }
+
+        // Quiz Check
+        function checkQuiz() {
+            const q1Correct = document.getElementById('q1b').checked;
+            const q2Correct = document.getElementById('q2b').checked;
+            const score = (q1Correct ? 1 : 0) + (q2Correct ? 1 : 0);
+            const feedback = document.getElementById('quizFeedback');
+            
+            feedback.innerHTML = `
+                <strong>Your Score: ${score}/2</strong><br>
+                ${q1Correct ? '✅' : '❌'} Q1: The correct answer is "Simile."<br>
+                ${q2Correct ? '✅' : '❌'} Q2: The correct answer is "Memory and imagination."
+            `;
+            
+            if (score === 2) {
+                feedback.innerHTML += '<br>Perfect! You understand the poem well.';
+                feedback.style.color = '#1a6e1a';
+            } else if (score === 1) {
+                feedback.innerHTML += '<br>Not bad! Review the analysis section.';
+                feedback.style.color = '#5a8a5a';
+            } else {
+                feedback.innerHTML += '<br>Try reading the poem again carefully.';
+                feedback.style.color = '#8a2a2a';
+            }
+            
+            feedback.classList.remove('hidden');
+        }
+
+        // Matching Exercise
+        function checkMatching() {
+            const answers = {
+                match1: 'simile',
+                match2: 'personification',
+                match3: 'hyperbole',
+                match4: 'oxymoron'
+            };
+            let correct = 0;
+            for (const [id, answer] of Object.entries(answers)) {
+                const userSelection = document.getElementById(id).value;
+                if (userSelection === answer) {
+                    correct++;
+                }
+            }
+            const feedback = document.getElementById('matchFeedback');
+            feedback.innerHTML = `You got ${correct} out of 4 correct!`;
+            if (correct === 4) {
+                feedback.innerHTML += '<br>Excellent! You know your literary devices well.';
+                feedback.style.color = '#1a6e1a';
+            } else if (correct >= 2) {
+                feedback.innerHTML += '<br>Good effort! Review the literary devices section.';
+                feedback.style.color = '#5a8a5a';
+            } else {
+                feedback.innerHTML += '<br>Try reviewing the poem analysis again.';
+                feedback.style.color = '#8a2a2a';
+            }
+            feedback.classList.remove('hidden');
+        }
+
+        // Theme Exploration
+        function checkTheme() {
+            const correctAnswers = ['theme2', 'theme3'];
+            let correct = 0;
+            let selected = 0;
+            
+            correctAnswers.forEach(id => {
+                if (document.getElementById(id).checked) {
+                    correct++;
+                }
+            });
+            
+            // Check for incorrect selections
+            if (document.getElementById('theme1').checked) selected++;
+            if (document.getElementById('theme4').checked) selected++;
+            
+            const feedback = document.getElementById('themeFeedback');
+            if (correct === 2 && selected === 0) {
+                feedback.innerHTML = '✅ Perfect! You identified the best examples of nature\'s beauty.';
+                feedback.style.color = '#1a6e1a';
+            } else if (correct >= 1 && selected === 0) {
+                feedback.innerHTML = '👍 Good! You found some good examples. The best are "A host, of golden daffodils" and "Tossing their heads in sprightly dance".';
+                feedback.style.color = '#5a8a5a';
+            } else if (selected > 0) {
+                feedback.innerHTML = 'Almost! Remember, we\'re looking for lines that specifically describe nature\'s beauty. Try again!';
+                feedback.style.color = '#8a2a2a';
+            } else {
+                feedback.innerHTML = 'Try again! Look for lines that vividly describe the daffodils and their movement.';
+                feedback.style.color = '#8a2a2a';
+            }
+            feedback.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
